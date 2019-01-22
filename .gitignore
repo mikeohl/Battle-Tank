@@ -75,3 +75,7 @@ BattleTank/\.vs/BattleTank/v15/Browse\.VC\.opendb
 
 
 
+
+*.ipch
+
+BattleTank/\.vs/BattleTank/v15/
