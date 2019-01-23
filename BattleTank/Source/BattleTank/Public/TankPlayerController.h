@@ -21,4 +21,12 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	
 	void AimAtCrosshair();
+
+private:
+	bool GetSightRayHitLocation(FVector& OutHitLocation) const;
+	//bool GetViewportSize(int32 OutViewportSizeX, int32 OutViewportSizeY);
+	UPROPERTY(EditAnywhere)
+	float CrossHairXLocation = 0.5f;
+	UPROPERTY(EditAnywhere)
+	float CrossHairYLocation = 0.33333f;
 };

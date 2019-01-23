@@ -23,6 +23,7 @@ void ATankPlayerController::BeginPlay()
 void ATankPlayerController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	AimAtCrosshair();
 }
 
 ATank* ATankPlayerController::GetControlledTank() const
@@ -32,6 +33,30 @@ ATank* ATankPlayerController::GetControlledTank() const
 
 void ATankPlayerController::AimAtCrosshair()
 {
-
+	if (!GetControlledTank()) { return; }
+	
+	FVector HitLocation; // Out Parameter
+	if (GetSightRayHitLocation(HitLocation)) 
+	{
+		//UE_LOG(LogTemp, Warning, TEXT("HitLocation: %s"), *HitLocation.ToString());
+	}
+	
 }
 
+// Get the world location that the crosshair is pointing at.
+bool ATankPlayerController::GetSightRayHitLocation(FVector& OutHitLocation) const
+{
+	//Get the crosshair location?
+	int32 ViewportSizeX, ViewportSizeY;
+	GetViewportSize(ViewportSizeX, ViewportSizeY);
+	auto ScreenLocation = FVector2D(ViewportSizeX * CrossHairXLocation, ViewportSizeY * CrossHairYLocation);
+	UE_LOG(LogTemp, Warning, TEXT("ScreenLocation: %s"), *ScreenLocation.ToString());
+	//Generate line to crosshair...
+	//Return location
+	return true;
+}
+
+//bool ATankPlayerController::GetViewportSize(int32 OutViewportSizeX, int32 OutViewportSizeY)
+//{
+//	return true;
+//}
