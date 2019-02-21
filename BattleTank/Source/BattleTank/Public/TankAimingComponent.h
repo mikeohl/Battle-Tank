@@ -30,6 +30,7 @@ public:
 
 	// Set the tank to Aim at HitLocation
 	void AimAt(const FVector& HitLocation, const float LaunchSpeed);
+	void Fire();
 
 	void SetBarrelReference(UTankBarrel* BarrelToSet);
 	void SetTurretReference(UTankTurret* TurretToSet);

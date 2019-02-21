@@ -70,12 +70,12 @@ void UTankAimingComponent::AimAt(const FVector& HitLocation, const float LaunchS
 		MoveTurret(AimDirection);
 		MoveBarrel(AimDirection);
 		auto Time = GetWorld()->GetTimeSeconds();
-		UE_LOG(LogTemp, Warning, TEXT("%f: Aim solution found"), Time);
+		// UE_LOG(LogTemp, Warning, TEXT("%f: Aim solution found"), Time);
 	}
 	else
 	{
 		auto Time = GetWorld()->GetTimeSeconds();
-		UE_LOG(LogTemp, Warning, TEXT("%f: No aim solution found"), Time);
+		// UE_LOG(LogTemp, Warning, TEXT("%f: No aim solution found"), Time);
 	}
 		//"%s aiming at: %s from %s"), *ThisTankName, *HitLocation.ToString(), *BarrelLocation.ToString());
 }
@@ -100,7 +100,7 @@ void UTankAimingComponent::MoveBarrel(FVector AimDirection)
 	auto AimAsRotator = AimDirection.Rotation();
 	auto DeltaRotator = AimAsRotator - BarrelRotation;
 
-	UE_LOG(LogTemp, Warning, TEXT("AimAsRotator: %s"), *DeltaRotator.ToString());
+	//UE_LOG(LogTemp, Warning, TEXT("AimAsRotator: %s"), *DeltaRotator.ToString());
 	Barrel->Elevate(DeltaRotator.Pitch);
 }
 
@@ -110,6 +110,6 @@ void UTankAimingComponent::MoveTurret(FVector AimDirection)
 	auto AimAsRotator = AimDirection.Rotation();
 	auto DeltaRotator = AimAsRotator - TurretRotation;
 
-	UE_LOG(LogTemp, Warning, TEXT("AimAsRotator: %s"), *DeltaRotator.ToString());
+	//UE_LOG(LogTemp, Warning, TEXT("AimAsRotator: %s"), *DeltaRotator.ToString());
 	Turret->Rotate(DeltaRotator.Yaw);
 }
