@@ -21,7 +21,7 @@ UTankAimingComponent::UTankAimingComponent()
 // Called when the game starts
 void UTankAimingComponent::BeginPlay()
 {
-	//Super::BeginPlay();
+	Super::BeginPlay();
 
 	// ...
 	

@@ -64,25 +64,32 @@ void ATank::SetTrackReferences(UTankTrack* LeftTrackToSet, UTankTrack* RightTrac
 
 void ATank::Fire()
 {
-	auto ThisTankName = GetName();
+	
 	auto Time = GetWorld()->GetTimeSeconds();
-	UE_LOG(LogTemp, Warning, TEXT("%s: Fired projectile at time: %f"), *ThisTankName, Time);
-
+	
 	bool bIsReloaded = (GetWorld()->GetTimeSeconds() - LastFireTime) > ReloadSpeed;
-
+	
 	if (Barrel && bIsReloaded) 
 	{ 
 		// Spawn a projectile at the socket location on the barrel
 		auto Projectile = GetWorld()->SpawnActor<AProjectile>(
-			ProjectileBlueprint,
+			ProjectileBlueprint, 
 			Barrel->GetSocketLocation(FName("Projectile")),
 			Barrel->GetSocketRotation(FName("Projectile"))
 		);
-
+		
+		if (!Projectile)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("No Projectile!"));
+			return;
+		}
 		Projectile->LaunchProjectile(LaunchSpeed);
 		LastFireTime = GetWorld()->GetTimeSeconds();
-	}
 
+		auto ThisTankName = GetName();
+		UE_LOG(LogTemp, Warning, TEXT("%s: Fired projectile at time: %f"), *ThisTankName, Time);
+	}
+	
 }
 /*
 void ATank::Drive(float Intensity)
