@@ -9,7 +9,7 @@
 /**
  * Tank Track Class sets maximum driving force and can apply force for tank movement
  */
-UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent), hidecategories = ("Collision"))
+UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class BATTLETANK_API UTankTrack : public UStaticMeshComponent
 {
 	GENERATED_BODY()
@@ -20,5 +20,5 @@ public:
 	
 	// Max force per track in Newtons
 	UPROPERTY(EditDefaultsOnly)
-	float MaxTrackForce = 250000.0f; // Assume 40000 kg tank, 10 m/s^2 acceleration
+	float MaxTrackForce = 40000000.0f; // Assume 40000 kg tank, 10 m/s^2 acceleration
 };

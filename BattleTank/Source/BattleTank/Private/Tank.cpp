@@ -2,8 +2,10 @@
 
 #include "Tank.h"
 #include "TankAimingComponent.h"
+#include "TankMovementComponent.h"
 #include "TankBarrel.h"
 #include "Projectile.h"
+//#include "TankTrack.h"
 #include "Runtime/Engine/Classes/Engine/World.h"
 
 
@@ -14,8 +16,11 @@ ATank::ATank()
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 
-	// Pointer to Aiming Component protected at contruction
+	// Pointer to Aiming Component protected at construction
 	TankAimingComponent = CreateDefaultSubobject<UTankAimingComponent>(FName("Aiming Component"));
+
+	// Pointer to Movement Component protected at construction
+	TankMovementComponent = CreateDefaultSubobject<UTankMovementComponent>(FName("Tank Movement Component"));
 }
 
 // Called when the game starts or when spawned
@@ -50,6 +55,12 @@ void ATank::SetTurretReference(UTankTurret* TurretToSet)
 {
 	TankAimingComponent->SetTurretReference(TurretToSet);
 }
+/*
+void ATank::SetTrackReferences(UTankTrack* LeftTrackToSet, UTankTrack* RightTrackToSet)
+{
+	TankMovementComponent->SetLeftTrackReference(LeftTrackToSet);
+	TankMovementComponent->SetRightTrackReference(RightTrackToSet);
+}*/
 
 void ATank::Fire()
 {
@@ -73,3 +84,8 @@ void ATank::Fire()
 	}
 
 }
+/*
+void ATank::Drive(float Intensity)
+{
+	TankMovementComponent->Move(Intensity);
+}*/
