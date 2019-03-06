@@ -42,13 +42,12 @@ void ATankAIController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (!PlayerTank || !ThisTank)
-	{
-		InitializeTanks();
-	}
+	// if (!PlayerTank || !ThisTank) { InitializeTanks(); }
 	
 	if (PlayerTank && ThisTank)
 	{
+		MoveToActor(PlayerTank, AcceptanceRadius);
+
 		// Aim at player
 		ThisTank->AimAt(PlayerTank->GetActorLocation());
 

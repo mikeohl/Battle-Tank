@@ -11,7 +11,6 @@ class UTankAimingComponent;
 class UTankMovementComponent;
 class UTankBarrel;
 class UTankTurret;
-class UTankTrack;
 class AProjectile;
 
 UCLASS()
@@ -45,14 +44,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Setup)
 	void SetTurretReference(UTankTurret* TurretToSet);
 
-	//UFUNCTION(BlueprintCallable, Category = Setup)
-	//void SetTrackReferences(UTankTrack* LeftTrackToSet, UTankTrack* RightTrackToSet);
-
 	UFUNCTION(BlueprintCallable, Category = Firing)
 	void Fire();
-
-	//UFUNCTION(BlueprintCallable, Category = Driving)
-	//void Drive(float Intensity);
 
 private:
 

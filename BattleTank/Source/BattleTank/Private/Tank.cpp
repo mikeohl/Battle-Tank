@@ -5,7 +5,6 @@
 #include "TankMovementComponent.h"
 #include "TankBarrel.h"
 #include "Projectile.h"
-//#include "TankTrack.h"
 #include "Runtime/Engine/Classes/Engine/World.h"
 
 
@@ -18,9 +17,6 @@ ATank::ATank()
 
 	// Pointer to Aiming Component protected at construction
 	TankAimingComponent = CreateDefaultSubobject<UTankAimingComponent>(FName("Aiming Component"));
-
-	// Pointer to Movement Component protected at construction
-	TankMovementComponent = CreateDefaultSubobject<UTankMovementComponent>(FName("Tank Movement Component"));
 }
 
 // Called when the game starts or when spawned
@@ -55,12 +51,6 @@ void ATank::SetTurretReference(UTankTurret* TurretToSet)
 {
 	TankAimingComponent->SetTurretReference(TurretToSet);
 }
-/*
-void ATank::SetTrackReferences(UTankTrack* LeftTrackToSet, UTankTrack* RightTrackToSet)
-{
-	TankMovementComponent->SetLeftTrackReference(LeftTrackToSet);
-	TankMovementComponent->SetRightTrackReference(RightTrackToSet);
-}*/
 
 void ATank::Fire()
 {
@@ -91,8 +81,3 @@ void ATank::Fire()
 	}
 	
 }
-/*
-void ATank::Drive(float Intensity)
-{
-	TankMovementComponent->Move(Intensity);
-}*/
