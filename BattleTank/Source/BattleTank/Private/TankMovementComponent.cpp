@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright Michael Ohl 2018-2019
 
 
 #include "TankMovementComponent.h"
@@ -44,8 +44,16 @@ void UTankMovementComponent::Turn(float Intensity)
 
 void UTankMovementComponent::RequestDirectMove(const FVector& MoveVelocity, bool bForceMaxSpeed)
 {
-	// No Super - Replacement functionality
-	auto TankName = GetOwner()->GetName();
-	UE_LOG(LogTemp, Warning, TEXT("%s moving at velocity %s"), *TankName, *MoveVelocity.GetSafeNormal().ToString());
+	UE_LOG(LogTemp, Warning, TEXT("%s: RequestDirectMove Called"), *GetOwner()->GetName())
+
+	auto TankForwardDirection = GetOwner()->GetActorForwardVector().GetSafeNormal();
+	auto AIMoveIntention = MoveVelocity.GetSafeNormal();
+
+	auto MoveIntensity = FVector::DotProduct(AIMoveIntention, TankForwardDirection);
+	auto TurnIntensity = FVector::CrossProduct(TankForwardDirection, AIMoveIntention).Z;
+	UE_LOG(LogTemp, Warning, TEXT("%s: Move Intensity = %f, Turn Intensity = %f"), *GetOwner()->GetName(), MoveIntensity, TurnIntensity);
+
+	Move(MoveIntensity);
+	Turn(TurnIntensity);
 	//UE_LOG(LogTemp, Warning, TEXT("RequestDirectMove Called"));
 }
