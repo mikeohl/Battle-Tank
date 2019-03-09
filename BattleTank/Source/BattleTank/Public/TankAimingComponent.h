@@ -29,11 +29,11 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+	UFUNCTION(BlueprintCallable, Category = "Setup")
+	void InitializeAimingComponent(UTankTurret* TurretToSet, UTankBarrel* BarrelToSet);
+
 	// Set the tank to Aim at HitLocation
 	void AimAt(const FVector& HitLocation, const float LaunchSpeed);
-
-	void SetBarrelReference(UTankBarrel* BarrelToSet);
-	void SetTurretReference(UTankTurret* TurretToSet);
 
 	void MoveBarrel(FVector AimDirection);
 	void MoveTurret(FVector AimDirection);

@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright Michael Ohl 2018-2019
 
 #include "TankAimingComponent.h"
 #include "TankBarrel.h"
@@ -34,6 +34,12 @@ void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 	//Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// ...
+}
+
+void UTankAimingComponent::InitializeAimingComponent(UTankTurret* TurretToSet, UTankBarrel* BarrelToSet)
+{
+	Turret = TurretToSet;
+	Barrel = BarrelToSet;
 }
 
 void UTankAimingComponent::AimAt(const FVector& HitLocation, const float LaunchSpeed) 
@@ -80,18 +86,7 @@ void UTankAimingComponent::AimAt(const FVector& HitLocation, const float LaunchS
 		//"%s aiming at: %s from %s"), *ThisTankName, *HitLocation.ToString(), *BarrelLocation.ToString());
 }
 
-void UTankAimingComponent::SetBarrelReference(UTankBarrel* BarrelToSet)
-{
-	if (!BarrelToSet) { return; }
-	Barrel = BarrelToSet;
-}
-
-void UTankAimingComponent::SetTurretReference(UTankTurret* TurretToSet)
-{
-	if (!TurretToSet) { return; }
-	Turret = TurretToSet;
-}
-
+// Assumes Barrel is initialized
 void UTankAimingComponent::MoveBarrel(FVector AimDirection)
 {
 	// Rotate barrel on tank at socket by pitch angle
@@ -104,6 +99,7 @@ void UTankAimingComponent::MoveBarrel(FVector AimDirection)
 	Barrel->Elevate(DeltaRotator.Pitch);
 }
 
+// Assumes Turret is initialized
 void UTankAimingComponent::MoveTurret(FVector AimDirection)
 {
 	auto TurretRotation = Turret->GetForwardVector().Rotation();

@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright Michael Ohl 2018-2019
 
 #include "TankPlayerController.h"
 #include "Tank.h"
