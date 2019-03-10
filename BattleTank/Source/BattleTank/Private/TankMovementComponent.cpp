@@ -16,7 +16,7 @@ void UTankMovementComponent::Move(float Intensity)
 	//auto Name = GetName();
 	//UE_LOG(LogTemp, Warning, TEXT("%s throttle set to %f"), *Name, Intensity);
 
-	if (!LeftTrack || !RightTrack)
+	if (!ensure(LeftTrack && RightTrack))
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Track(s) missing from tank"));
 		return;
@@ -32,7 +32,7 @@ void UTankMovementComponent::Turn(float Intensity)
 	//auto Name = GetName();
 	//UE_LOG(LogTemp, Warning, TEXT("%s throttle set to %f"), *Name, Intensity);
 
-	if (!LeftTrack || !RightTrack)
+	if (!ensure(LeftTrack && RightTrack))
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Track(s) missing from tank"));
 		return;

@@ -2,7 +2,6 @@
 
 #include "Tank.h"
 #include "TankAimingComponent.h"
-#include "TankMovementComponent.h"
 #include "TankBarrel.h"
 #include "Projectile.h"
 #include "Runtime/Engine/Classes/Engine/World.h"
@@ -20,7 +19,6 @@ ATank::ATank()
 void ATank::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called to bind functionality to input
@@ -34,17 +32,20 @@ void ATank::AimAt(const FVector& HitLocation) const
 {
 	//auto ThisTankName = GetName();
 	//UE_LOG(LogTemp, Warning, TEXT("%s aiming at: %s"), *ThisTankName, *HitLocation.ToString());
+
+	if (!ensure(TankAimingComponent)) { return; }
 	TankAimingComponent->AimAt(HitLocation, LaunchSpeed);
 }
 
 void ATank::Fire()
 {
+	if (!ensure(Barrel)) { return; }
 	
 	auto Time = GetWorld()->GetTimeSeconds();
 	
 	bool bIsReloaded = (GetWorld()->GetTimeSeconds() - LastFireTime) > ReloadSpeed;
 	
-	if (Barrel && bIsReloaded) 
+	if (bIsReloaded) 
 	{ 
 		// Spawn a projectile at the socket location on the barrel
 		auto Projectile = GetWorld()->SpawnActor<AProjectile>(
@@ -53,7 +54,7 @@ void ATank::Fire()
 			Barrel->GetSocketRotation(FName("Projectile"))
 		);
 		
-		if (!Projectile)
+		if (!ensure(Projectile))
 		{
 			UE_LOG(LogTemp, Warning, TEXT("No Projectile!"));
 			return;

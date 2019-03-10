@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright Michael Ohl 2018-2019
 
 #pragma once
 
@@ -43,7 +43,7 @@ protected:
 	virtual void BeginPlay() override;
 
 	UPROPERTY(BlueprintReadOnly, Category = "State")
-	EFiringState FiringStatus = EFiringState::Reloading;
+	EFiringState FiringStatus = EFiringState::Aiming;
 
 private:
 	UTankBarrel* Barrel = nullptr;

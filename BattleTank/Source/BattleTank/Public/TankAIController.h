@@ -11,7 +11,8 @@ class ATank;
 
 
 /**
- * 
+ * Initializes and directs AI tank behavior
+ * Depends on TankMovementComponent via pathfinding system
  */
 UCLASS()
 class BATTLETANK_API ATankAIController : public AAIController

@@ -18,7 +18,7 @@ void ATankAIController::InitializeTanks()
 {
 	// Set player tank
 	auto PlayerPawn = GetWorld()->GetFirstPlayerController()->GetPawn();
-	if (PlayerPawn)
+	if (ensure(PlayerPawn))
 	{
 		PlayerTank = Cast<ATank>(PlayerPawn);
 	}
@@ -26,7 +26,7 @@ void ATankAIController::InitializeTanks()
 	// Set this tank
 	ThisTank = Cast<ATank>(GetPawn());
 
-	if (!PlayerTank || !ThisTank)
+	if (!ensure(PlayerTank && ThisTank))
 	{
 		UE_LOG(LogTemp, Warning, TEXT("FAILED TO GET TANK"))
 	}
@@ -44,7 +44,7 @@ void ATankAIController::Tick(float DeltaTime)
 
 	// if (!PlayerTank || !ThisTank) { InitializeTanks(); }
 	
-	if (PlayerTank && ThisTank)
+	if (ensure(PlayerTank && ThisTank))
 	{
 		MoveToActor(PlayerTank, AcceptanceRadius);
 	
@@ -52,7 +52,7 @@ void ATankAIController::Tick(float DeltaTime)
 		ThisTank->AimAt(PlayerTank->GetActorLocation());
 
 		// Fire if ready
-		//ThisTank->Fire();
+		//ThisTank->Fire(); // TODO: UNCOMMENT THIS WHEN READY TO FIRE AGAIN
 	}
 
 }

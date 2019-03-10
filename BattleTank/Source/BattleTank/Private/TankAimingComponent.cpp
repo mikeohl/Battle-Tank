@@ -13,7 +13,6 @@ UTankAimingComponent::UTankAimingComponent()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = false;
-
 	// ...
 }
 
@@ -22,7 +21,6 @@ UTankAimingComponent::UTankAimingComponent()
 void UTankAimingComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
 	// ...
 	
 }
@@ -44,7 +42,7 @@ void UTankAimingComponent::InitializeAimingComponent(UTankTurret* TurretToSet, U
 
 void UTankAimingComponent::AimAt(const FVector& HitLocation, const float LaunchSpeed) 
 {
-	if (!Barrel) { return; }
+	if (!ensure(Barrel)) { return; }
 
 	// Projectile properties
 	FVector OutLaunchVelocity(0);
@@ -86,9 +84,10 @@ void UTankAimingComponent::AimAt(const FVector& HitLocation, const float LaunchS
 		//"%s aiming at: %s from %s"), *ThisTankName, *HitLocation.ToString(), *BarrelLocation.ToString());
 }
 
-// Assumes Barrel is initialized
 void UTankAimingComponent::MoveBarrel(FVector AimDirection)
 {
+	if (!ensure(Barrel)) { return; }
+
 	// Rotate barrel on tank at socket by pitch angle
 	// Find difference between current barrel rotation and AimDirection
 	auto BarrelRotation = Barrel->GetForwardVector().Rotation();
@@ -99,9 +98,10 @@ void UTankAimingComponent::MoveBarrel(FVector AimDirection)
 	Barrel->Elevate(DeltaRotator.Pitch);
 }
 
-// Assumes Turret is initialized
 void UTankAimingComponent::MoveTurret(FVector AimDirection)
 {
+	if (!ensure(Turret)) { return; }
+
 	auto TurretRotation = Turret->GetForwardVector().Rotation();
 	auto AimAsRotator = AimDirection.Rotation();
 	auto DeltaRotator = AimAsRotator - TurretRotation;
