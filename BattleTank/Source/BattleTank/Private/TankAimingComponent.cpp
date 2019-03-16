@@ -1,6 +1,7 @@
 // Copyright Michael Ohl 2018-2019
 
 #include "TankAimingComponent.h"
+#include "Projectile.h"
 #include "TankBarrel.h"
 #include "TankTurret.h"
 #include "Runtime/Engine/Classes/Engine/World.h"
@@ -12,26 +13,34 @@ UTankAimingComponent::UTankAimingComponent()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = false;
+	PrimaryComponentTick.bCanEverTick = true;
 	// ...
 }
-
 
 // Called when the game starts
 void UTankAimingComponent::BeginPlay()
 {
 	Super::BeginPlay();
 	// ...
-	
+	UE_LOG(LogTemp, Warning, TEXT("Aiming Component Begin Play"))
+	LastFireTime = GetWorld()->GetTimeSeconds();
 }
-
 
 // Called every frame
 void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
-	//Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+	UE_LOG(LogTemp, Warning, TEXT("Aiming Component Ticking"))
 
 	// ...
+	if ((GetWorld()->GetTimeSeconds() - LastFireTime) > ReloadSpeed)
+	{
+		FiringStatus = EFiringState::Aiming;
+	}
+	else
+	{
+		FiringStatus = EFiringState::Reloading;
+	}
 }
 
 void UTankAimingComponent::InitializeAimingComponent(UTankTurret* TurretToSet, UTankBarrel* BarrelToSet)
@@ -82,6 +91,33 @@ void UTankAimingComponent::AimAt(const FVector& HitLocation)
 		// UE_LOG(LogTemp, Warning, TEXT("%f: No aim solution found"), Time);
 	}
 		//"%s aiming at: %s from %s"), *ThisTankName, *HitLocation.ToString(), *BarrelLocation.ToString());
+}
+
+void UTankAimingComponent::Fire()
+{
+	if (!ensure(Barrel && ProjectileBlueprint)) { return; }
+
+	if (FiringStatus != EFiringState::Reloading)
+	{
+		// Spawn a projectile at the socket location on the barrel
+		auto Projectile = GetWorld()->SpawnActor<AProjectile>(
+			ProjectileBlueprint,
+			Barrel->GetSocketLocation(FName("Projectile")),
+			Barrel->GetSocketRotation(FName("Projectile"))
+			);
+
+		if (!ensure(Projectile))
+		{
+			UE_LOG(LogTemp, Warning, TEXT("No Projectile!"));
+			return;
+		}
+		Projectile->LaunchProjectile(LaunchSpeed);
+		LastFireTime = GetWorld()->GetTimeSeconds();
+
+		auto ThisTankName = GetName();
+		//UE_LOG(LogTemp, Warning, TEXT("%s: Fired projectile at time: %f"), *ThisTankName, Time);
+	}
+
 }
 
 void UTankAimingComponent::MoveBarrel(FVector AimDirection)

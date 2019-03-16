@@ -36,7 +36,6 @@ void ATankAIController::InitializeTanks()
 	UE_LOG(LogTemp, Warning, TEXT("AIController Begin Play"));
 }
 
-
 void ATankAIController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
@@ -54,7 +53,7 @@ void ATankAIController::Tick(float DeltaTime)
 	AimingComponent->AimAt(PlayerTank->GetActorLocation());
 
 	// Fire if ready
-	// ThisTank->Fire(); // TODO: UNCOMMENT THIS WHEN READY TO FIRE AGAIN
+	AimingComponent->Fire(); 
 
 }
 
