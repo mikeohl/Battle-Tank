@@ -1,6 +1,7 @@
 // Copyright Michael Ohl 2018-2019
 
 #include "TankAIController.h"
+#include "TankAimingComponent.h"
 #include "Tank.h"
 #include "Runtime/Engine/Classes/Engine/World.h"
 
@@ -10,8 +11,6 @@ void ATankAIController::BeginPlay()
 	Super::BeginPlay();
 
 	InitializeTanks();
-
-	
 }
 
 void ATankAIController::InitializeTanks()
@@ -44,16 +43,18 @@ void ATankAIController::Tick(float DeltaTime)
 
 	// if (!PlayerTank || !ThisTank) { InitializeTanks(); }
 	
-	if (ensure(PlayerTank && ThisTank))
-	{
-		MoveToActor(PlayerTank, AcceptanceRadius);
-	
-		// Aim at player
-		ThisTank->AimAt(PlayerTank->GetActorLocation());
+	if (!ensure(PlayerTank && ThisTank)) { return; }
 
-		// Fire if ready
-		//ThisTank->Fire(); // TODO: UNCOMMENT THIS WHEN READY TO FIRE AGAIN
-	}
+	MoveToActor(PlayerTank, AcceptanceRadius);
+	
+	// Aim at player
+	auto AimingComponent = ThisTank->FindComponentByClass<UTankAimingComponent>();
+	if (!ensure(AimingComponent)) { return; }
+		
+	AimingComponent->AimAt(PlayerTank->GetActorLocation());
+
+	// Fire if ready
+	// ThisTank->Fire(); // TODO: UNCOMMENT THIS WHEN READY TO FIRE AGAIN
 
 }
 

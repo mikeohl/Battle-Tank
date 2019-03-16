@@ -2,7 +2,6 @@
 
 #include "TankPlayerController.h"
 #include "TankAimingComponent.h"
-#include "Tank.h"
 
 #include "Runtime/Engine/Classes/Engine/World.h"
 
@@ -11,19 +10,9 @@ void ATankPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	auto ControlledTank = GetControlledTank();
-	if (!ensure(ControlledTank))
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Not Controlling A Tank"));
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("PlayerController Possessing: %s"), *(ControlledTank->GetName()));
-		// *(... for T *char in macro
-	}
-	
+	auto AimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
 
-	auto AimingComponent = ControlledTank->FindComponentByClass<UTankAimingComponent>();
+	// Check that we've found aiming component and log to console
 	if (ensure(AimingComponent))
 	{
 		FoundAimingComponent(AimingComponent);
@@ -41,24 +30,17 @@ void ATankPlayerController::Tick(float DeltaTime)
 	AimAtCrosshair();
 }
 
-ATank* ATankPlayerController::GetControlledTank() const
-{
-	return Cast<ATank>(GetPawn());
-}
-
 void ATankPlayerController::AimAtCrosshair() const
 {
-	auto ControlledTank = GetControlledTank();
-	if (!ensure(ControlledTank)) { return; }
+	auto AimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
+	if (!ensure(AimingComponent)) { return; }
 	
 	FVector HitLocation; // Out Parameter
 	if (GetSightRayHitLocation(HitLocation)) 
 	{
 		//UE_LOG(LogTemp, Warning, TEXT("Hit Location: %s"), *HitLocation.ToString());
-		ControlledTank->AimAt(HitLocation);
-
+		AimingComponent->AimAt(HitLocation);
 	}
-	
 }
 
 // Get the world location that the crosshair is pointing at.

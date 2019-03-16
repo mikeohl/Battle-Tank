@@ -44,14 +44,14 @@ void UTankMovementComponent::Turn(float Intensity)
 
 void UTankMovementComponent::RequestDirectMove(const FVector& MoveVelocity, bool bForceMaxSpeed)
 {
-	UE_LOG(LogTemp, Warning, TEXT("%s: RequestDirectMove Called"), *GetOwner()->GetName())
+	// UE_LOG(LogTemp, Warning, TEXT("%s: RequestDirectMove Called"), *GetOwner()->GetName())
 
 	auto TankForwardDirection = GetOwner()->GetActorForwardVector().GetSafeNormal();
 	auto AIMoveIntention = MoveVelocity.GetSafeNormal();
 
 	auto MoveIntensity = FVector::DotProduct(AIMoveIntention, TankForwardDirection);
 	auto TurnIntensity = FVector::CrossProduct(TankForwardDirection, AIMoveIntention).Z;
-	UE_LOG(LogTemp, Warning, TEXT("%s: Move Intensity = %f, Turn Intensity = %f"), *GetOwner()->GetName(), MoveIntensity, TurnIntensity);
+	// UE_LOG(LogTemp, Warning, TEXT("%s: Move Intensity = %f, Turn Intensity = %f"), *GetOwner()->GetName(), MoveIntensity, TurnIntensity);
 
 	Move(MoveIntensity);
 	Turn(TurnIntensity);

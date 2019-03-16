@@ -1,7 +1,6 @@
 // Copyright Michael Ohl 2018-2019
 
 #include "Tank.h"
-#include "TankAimingComponent.h"
 #include "TankBarrel.h"
 #include "Projectile.h"
 #include "Runtime/Engine/Classes/Engine/World.h"
@@ -25,16 +24,6 @@ void ATank::BeginPlay()
 void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
-}
-
-void ATank::AimAt(const FVector& HitLocation) const
-{
-	//auto ThisTankName = GetName();
-	//UE_LOG(LogTemp, Warning, TEXT("%s aiming at: %s"), *ThisTankName, *HitLocation.ToString());
-
-	if (!ensure(TankAimingComponent)) { return; }
-	TankAimingComponent->AimAt(HitLocation, LaunchSpeed);
 }
 
 void ATank::Fire()
@@ -59,7 +48,7 @@ void ATank::Fire()
 			UE_LOG(LogTemp, Warning, TEXT("No Projectile!"));
 			return;
 		}
-		Projectile->LaunchProjectile(LaunchSpeed);
+		//Projectile->LaunchProjectile(LaunchSpeed);
 		LastFireTime = GetWorld()->GetTimeSeconds();
 
 		auto ThisTankName = GetName();

@@ -40,7 +40,7 @@ void UTankAimingComponent::InitializeAimingComponent(UTankTurret* TurretToSet, U
 	Barrel = BarrelToSet;
 }
 
-void UTankAimingComponent::AimAt(const FVector& HitLocation, const float LaunchSpeed) 
+void UTankAimingComponent::AimAt(const FVector& HitLocation) 
 {
 	if (!ensure(Barrel)) { return; }
 
@@ -70,7 +70,7 @@ void UTankAimingComponent::AimAt(const FVector& HitLocation, const float LaunchS
 	{
 		auto AimDirection = OutLaunchVelocity.GetSafeNormal();
 		auto ThisTankName = GetOwner()->GetName();
-		//UE_LOG(LogTemp, Warning, TEXT("%s Firing at Direction: %s"), *ThisTankName, *AimDirection.ToString());
+		// UE_LOG(LogTemp, Warning, TEXT("%s Firing at Direction: %s"), *ThisTankName, *AimDirection.ToString());
 		MoveTurret(AimDirection);
 		MoveBarrel(AimDirection);
 		auto Time = GetWorld()->GetTimeSeconds();

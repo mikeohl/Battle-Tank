@@ -25,7 +25,6 @@ public:
 
 protected:
 	UFUNCTION(BlueprintCallable, Category = "Setup")
-	ATank * GetControlledTank() const;
 	void AimAtCrosshair() const;
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "Setup")

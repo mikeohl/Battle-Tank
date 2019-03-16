@@ -33,7 +33,7 @@ public:
 	void InitializeAimingComponent(UTankTurret* TurretToSet, UTankBarrel* BarrelToSet);
 
 	// Set the tank to Aim at HitLocation
-	void AimAt(const FVector& HitLocation, const float LaunchSpeed);
+	void AimAt(const FVector& HitLocation);
 
 	void MoveBarrel(FVector AimDirection);
 	void MoveTurret(FVector AimDirection);
@@ -49,4 +49,6 @@ private:
 	UTankBarrel* Barrel = nullptr;
 	UTankTurret* Turret = nullptr;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Firing")
+	float LaunchSpeed = 4000.0f; // 4000 m/s -> TODO: Find sensible value
 };
