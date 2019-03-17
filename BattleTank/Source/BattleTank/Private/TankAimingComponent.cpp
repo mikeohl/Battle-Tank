@@ -30,16 +30,19 @@ void UTankAimingComponent::BeginPlay()
 void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-	UE_LOG(LogTemp, Warning, TEXT("Aiming Component Ticking"))
 
 	// ...
-	if ((GetWorld()->GetTimeSeconds() - LastFireTime) > ReloadSpeed)
+	if ((GetWorld()->GetTimeSeconds() - LastFireTime) < ReloadSpeed)
+	{
+		FiringStatus = EFiringState::Reloading;
+	}
+	else if (IsBarrelMoving())
 	{
 		FiringStatus = EFiringState::Aiming;
 	}
 	else
 	{
-		FiringStatus = EFiringState::Reloading;
+		FiringStatus = EFiringState::Locked;
 	}
 }
 
@@ -56,18 +59,12 @@ void UTankAimingComponent::AimAt(const FVector& HitLocation)
 	// Projectile properties
 	FVector OutLaunchVelocity(0);
 	FVector StartLocation = Barrel->GetSocketLocation(FName("Projectile"));
-
-	// Calculate the OutLaunchVelocity
-	//auto AimDirection = OutLaunchVelocity.GetSafeNormal();
-	auto ThisTankName = GetOwner()->GetName();
-	
-	//UE_LOG(LogTemp, Warning, TEXT("Firing at Speed: %f"), LaunchSpeed);
 	
 	bool bHasAimSolution = UGameplayStatics::SuggestProjectileVelocity(
 		this, 
 		OutLaunchVelocity, // Direction to fire 
-		StartLocation, 
-		HitLocation, 
+		StartLocation,
+		HitLocation,
 		LaunchSpeed,
 		false,
 		0.0F,
@@ -77,20 +74,25 @@ void UTankAimingComponent::AimAt(const FVector& HitLocation)
 
 	if (bHasAimSolution)
 	{
-		auto AimDirection = OutLaunchVelocity.GetSafeNormal();
-		auto ThisTankName = GetOwner()->GetName();
-		// UE_LOG(LogTemp, Warning, TEXT("%s Firing at Direction: %s"), *ThisTankName, *AimDirection.ToString());
+		AimDirection = OutLaunchVelocity.GetSafeNormal();
+
 		MoveTurret(AimDirection);
 		MoveBarrel(AimDirection);
-		auto Time = GetWorld()->GetTimeSeconds();
-		// UE_LOG(LogTemp, Warning, TEXT("%f: Aim solution found"), Time);
+
+		// UE_LOG(LogTemp, Warning, TEXT("%f: Aim solution found"), GetWorld()->GetTimeSeconds());
+		// UE_LOG(LogTemp, Warning, TEXT("%s Firing at Direction: %s"), *(GetOwner()->GetName()), *AimDirection.ToString());
 	}
 	else
 	{
-		auto Time = GetWorld()->GetTimeSeconds();
-		// UE_LOG(LogTemp, Warning, TEXT("%f: No aim solution found"), Time);
+		// UE_LOG(LogTemp, Warning, TEXT("%f: No aim solution found"), GetWorld()->GetTimeSeconds());
 	}
 		//"%s aiming at: %s from %s"), *ThisTankName, *HitLocation.ToString(), *BarrelLocation.ToString());
+}
+
+bool UTankAimingComponent::IsBarrelMoving()
+{
+	if (!ensure(Barrel)) { return false; }
+	return !Barrel->GetForwardVector().Equals(AimDirection, 0.01f);
 }
 
 void UTankAimingComponent::Fire()
