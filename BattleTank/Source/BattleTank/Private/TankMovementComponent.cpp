@@ -13,14 +13,20 @@ void UTankMovementComponent::InitializeTracks(UTankTrack* LeftTrackToSet, UTankT
 
 void UTankMovementComponent::Move(float Intensity)
 {
-	//auto Name = GetName();
-	//UE_LOG(LogTemp, Warning, TEXT("%s throttle set to %f"), *Name, Intensity);
+	auto Name = GetOwner()->GetName();
+    //UE_LOG(LogTemp, Warning, TEXT("%s throttle set to %f"), *Name, Intensity);
 
 	if (!ensure(LeftTrack && RightTrack))
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Track(s) missing from tank"));
 		return;
 	}
+
+	// Cap backwards throttle at 1/2 maximum
+	//FMath::Clamp<float>(Intensity, -0.5f, 1.0f);
+
+	if (abs(Intensity) > .5f)
+		UE_LOG(LogTemp, Warning, TEXT("%s: Stick Intensity: %f"), *Name, Intensity);
 
 	RightTrack->SetThrottle(Intensity);
 	LeftTrack->SetThrottle(Intensity);
@@ -38,6 +44,13 @@ void UTankMovementComponent::Turn(float Intensity)
 		return;
 	}
 
+	// Cap backwards throttle at 1/2 maximum
+	//Intensity = Intensity / 2;
+
+	auto Name = GetOwner()->GetName();
+	if (abs(Intensity) > .5f)
+	UE_LOG(LogTemp, Warning, TEXT("%s: Stick Intensity: %f"), *Name, Intensity);
+
 	RightTrack->SetThrottle(-Intensity);
 	LeftTrack->SetThrottle(Intensity);
 }
@@ -50,10 +63,14 @@ void UTankMovementComponent::RequestDirectMove(const FVector& MoveVelocity, bool
 	auto AIMoveIntention = MoveVelocity.GetSafeNormal();
 
 	auto MoveIntensity = FVector::DotProduct(AIMoveIntention, TankForwardDirection);
+	Move(MoveIntensity);
+
 	auto TurnIntensity = FVector::CrossProduct(TankForwardDirection, AIMoveIntention).Z;
+	Turn(TurnIntensity);
 	// UE_LOG(LogTemp, Warning, TEXT("%s: Move Intensity = %f, Turn Intensity = %f"), *GetOwner()->GetName(), MoveIntensity, TurnIntensity);
 
-	Move(MoveIntensity);
-	Turn(TurnIntensity);
+	
+	
+	
 	//UE_LOG(LogTemp, Warning, TEXT("RequestDirectMove Called"));
 }

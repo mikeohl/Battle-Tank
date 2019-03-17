@@ -24,10 +24,12 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	void InitializeTanks();
 
+
 private:
 	ATank* ThisTank = nullptr;
 	ATank* PlayerTank = nullptr;
-	
+
+protected:
 	UPROPERTY(EditDefaultsOnly)
-	float AcceptanceRadius = 3000.0f;
+	float AcceptanceRadius = 1000.0f;
 };

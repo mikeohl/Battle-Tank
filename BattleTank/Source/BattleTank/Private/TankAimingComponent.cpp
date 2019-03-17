@@ -14,24 +14,22 @@ UTankAimingComponent::UTankAimingComponent()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
-	// ...
 }
 
 // Called when the game starts
 void UTankAimingComponent::BeginPlay()
 {
 	Super::BeginPlay();
-	// ...
-	UE_LOG(LogTemp, Warning, TEXT("Aiming Component Begin Play"))
+	
+	UE_LOG(LogTemp, Warning, TEXT("%s: Aiming Component Begin Play"), *(GetOwner()->GetName()))
 	LastFireTime = GetWorld()->GetTimeSeconds();
 }
 
 // Called every frame
 void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+	// Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	// ...
 	if ((GetWorld()->GetTimeSeconds() - LastFireTime) < ReloadSpeed)
 	{
 		FiringStatus = EFiringState::Reloading;
@@ -60,7 +58,8 @@ void UTankAimingComponent::AimAt(const FVector& HitLocation)
 	FVector OutLaunchVelocity(0);
 	FVector StartLocation = Barrel->GetSocketLocation(FName("Projectile"));
 	
-	bool bHasAimSolution = UGameplayStatics::SuggestProjectileVelocity(
+	bool bHasAimSolution = UGameplayStatics::SuggestProjectileVelocity
+	(
 		this, 
 		OutLaunchVelocity, // Direction to fire 
 		StartLocation,
@@ -82,11 +81,7 @@ void UTankAimingComponent::AimAt(const FVector& HitLocation)
 		// UE_LOG(LogTemp, Warning, TEXT("%f: Aim solution found"), GetWorld()->GetTimeSeconds());
 		// UE_LOG(LogTemp, Warning, TEXT("%s Firing at Direction: %s"), *(GetOwner()->GetName()), *AimDirection.ToString());
 	}
-	else
-	{
-		// UE_LOG(LogTemp, Warning, TEXT("%f: No aim solution found"), GetWorld()->GetTimeSeconds());
-	}
-		//"%s aiming at: %s from %s"), *ThisTankName, *HitLocation.ToString(), *BarrelLocation.ToString());
+	// else { UE_LOG(LogTemp, Warning, TEXT("%f: No aim solution found"), GetWorld()->GetTimeSeconds()); }
 }
 
 bool UTankAimingComponent::IsBarrelMoving()
@@ -122,11 +117,11 @@ void UTankAimingComponent::Fire()
 
 }
 
+// Rotate barrel on tank at socket by pitch angle
 void UTankAimingComponent::MoveBarrel(FVector AimDirection)
 {
 	if (!ensure(Barrel)) { return; }
 
-	// Rotate barrel on tank at socket by pitch angle
 	// Find difference between current barrel rotation and AimDirection
 	auto BarrelRotation = Barrel->GetForwardVector().Rotation();
 	auto AimAsRotator = AimDirection.Rotation();
@@ -145,5 +140,17 @@ void UTankAimingComponent::MoveTurret(FVector AimDirection)
 	auto DeltaRotator = AimAsRotator - TurretRotation;
 
 	//UE_LOG(LogTemp, Warning, TEXT("AimAsRotator: %s"), *DeltaRotator.ToString());
+
+	// Ensure Shortest Route
+	if (DeltaRotator.Yaw >= 180.0f)
+	{
+		DeltaRotator.Yaw = -DeltaRotator.Yaw;
+	}
+
 	Turret->Rotate(DeltaRotator.Yaw);
+}
+
+EFiringState UTankAimingComponent::GetFiringState()
+{
+	return FiringStatus;
 }

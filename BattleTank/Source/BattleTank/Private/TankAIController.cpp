@@ -10,7 +10,7 @@ void ATankAIController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	InitializeTanks();
+	//InitializeTanks();
 }
 
 void ATankAIController::InitializeTanks()
@@ -40,20 +40,22 @@ void ATankAIController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	// if (!PlayerTank || !ThisTank) { InitializeTanks(); }
-	
+	if (!PlayerTank || !ThisTank) { InitializeTanks(); }
+
 	if (!ensure(PlayerTank && ThisTank)) { return; }
 
 	MoveToActor(PlayerTank, AcceptanceRadius);
-	
+
 	// Aim at player
 	auto AimingComponent = ThisTank->FindComponentByClass<UTankAimingComponent>();
+
 	if (!ensure(AimingComponent)) { return; }
-		
 	AimingComponent->AimAt(PlayerTank->GetActorLocation());
 
 	// Fire if ready
-	AimingComponent->Fire(); 
-
+	if (AimingComponent->GetFiringState() == EFiringState::Locked)
+	{
+		//AimingComponent->Fire();
+	}
 }
 
