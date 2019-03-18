@@ -147,7 +147,7 @@ void UTankAimingComponent::MoveTurret(FVector AimDirection)
 	//UE_LOG(LogTemp, Warning, TEXT("AimAsRotator: %s"), *DeltaRotator.ToString());
 
 	// Ensure Shortest Route
-	if (DeltaRotator.Yaw >= 180.0f)
+	if (FMath::Abs(DeltaRotator.Yaw) >= 180.0f)
 	{
 		DeltaRotator.Yaw = -DeltaRotator.Yaw;
 	}
