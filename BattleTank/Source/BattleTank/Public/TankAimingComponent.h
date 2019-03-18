@@ -9,7 +9,7 @@
 UENUM()
 enum class EFiringState : uint8
 {
-	Reloading, Aiming, Locked
+	Reloading, Aiming, Locked, OutOfAmmo
 };
 
 // Forward Declarations
@@ -38,6 +38,9 @@ public:
 	EFiringState GetFiringState();
 
 	UFUNCTION(BlueprintCallable, Category = "Firing")
+	FString GetAmmoCount();
+
+	UFUNCTION(BlueprintCallable, Category = "Firing")
 	void Fire();
 
 	void MoveBarrel(FVector AimDirection);
@@ -51,6 +54,7 @@ protected:
 	UPROPERTY(BlueprintReadOnly, Category = "State")
 	EFiringState FiringStatus = EFiringState::Reloading;
 
+
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "Setup")
 	TSubclassOf<AProjectile> ProjectileBlueprint;
@@ -60,6 +64,9 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
 	float ReloadSpeed = 3.0f; // in seconds
+
+	UPROPERTY(EditDefaultsOnly, Category = "Firing")
+	int AmmoCount = 50;
 
 	double LastFireTime = -5.0;
 	FVector AimDirection = FVector::ZeroVector;
