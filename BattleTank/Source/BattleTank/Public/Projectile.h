@@ -26,6 +26,7 @@ protected:
 protected:
 	UFUNCTION()
 	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
+	void TimerExpired();
 
 public:	
 	// Called every frame
@@ -47,4 +48,7 @@ private:
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	URadialForceComponent* ExplosionForce = nullptr;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
+	float DestroyDelay = 5.0f;
 };
