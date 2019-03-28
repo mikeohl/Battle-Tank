@@ -15,7 +15,7 @@ BattleTank/Binaries/*
 BattleTank/Saved/*
 
 # Any Starter Content Pack Assets
-BattleTank/Content/StarterContent/*
+# **ALLOW** BattleTank/Content/StarterContent/*
 
 # Builds
 BattleTank/Build/*
