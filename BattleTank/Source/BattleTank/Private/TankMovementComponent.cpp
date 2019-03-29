@@ -26,7 +26,7 @@ void UTankMovementComponent::Move(float Intensity)
 	//FMath::Clamp<float>(Intensity, -0.5f, 1.0f);
 
 	if (abs(Intensity) > .5f)
-		UE_LOG(LogTemp, Warning, TEXT("%s: Stick Intensity: %f"), *Name, Intensity);
+		//UE_LOG(LogTemp, Warning, TEXT("%s: Stick Intensity: %f"), *Name, Intensity);
 
 	RightTrack->SetThrottle(Intensity);
 	LeftTrack->SetThrottle(Intensity);
@@ -49,7 +49,7 @@ void UTankMovementComponent::Turn(float Intensity)
 
 	auto Name = GetOwner()->GetName();
 	if (abs(Intensity) > .5f)
-	UE_LOG(LogTemp, Warning, TEXT("%s: Stick Intensity: %f"), *Name, Intensity);
+	//UE_LOG(LogTemp, Warning, TEXT("%s: Stick Intensity: %f"), *Name, Intensity);
 
 	RightTrack->SetThrottle(-Intensity);
 	LeftTrack->SetThrottle(Intensity);

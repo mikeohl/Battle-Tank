@@ -20,7 +20,18 @@ protected:
 	virtual void BeginPlay() override;
 
 public:	
-
 	// Called to bind functionality to input
 	//virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	virtual float TakeDamage(float DamageAmount, FDamageEvent const &DamageEvent, AController *EventInstigator, AActor *DamageCauser) override;
+
+	UFUNCTION(BlueprintPure, Category = "Health")
+	float GetHealthPercentage() const;
+
+private:
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
+	int32 InitialHealth = 100;
+
+	UPROPERTY(VisibleAnywhere, Category = "Health")
+	int32 CurrentHealth = InitialHealth;
 };

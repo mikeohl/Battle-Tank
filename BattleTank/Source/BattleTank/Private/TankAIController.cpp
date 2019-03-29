@@ -22,20 +22,8 @@ void ATankAIController::InitializeTanks()
 		PlayerTank = Cast<ATank>(PlayerPawn);
 		UE_LOG(LogTemp, Warning, TEXT("GOT PLAYER TANK TANK"))
 	}
-
-	// Set this tank
-	//ThisTank = Cast<ATank>(GetPawn());
-    //
-	//if (!ensure(PlayerTank && ThisTank))
-	//{
-	//	UE_LOG(LogTemp, Warning, TEXT("FAILED TO GET TANK"))
-	//}
-	//else
-	//{
-	//	UE_LOG(LogTemp, Warning, TEXT("AIController (%s) found player tank: %s"), *(ThisTank->GetName()), *(PlayerTank->GetName()));
-	//}
-	//UE_LOG(LogTemp, Warning, TEXT("AIController Begin Play"));
 }
+
 
 void ATankAIController::Tick(float DeltaTime)
 {
@@ -57,6 +45,20 @@ void ATankAIController::Tick(float DeltaTime)
 	if (AimingComponent->GetFiringState() == EFiringState::Locked)
 	{
 		AimingComponent->Fire();
+	}
+}
+
+// Set Delegate here because we can't reliably say that we've possessed at BeginPlay
+void ATankAIController::SetPawn(APawn* InPawn)
+{
+	Super::SetPawn(InPawn);
+
+	if (InPawn)
+	{
+		auto PossessedTank = Cast<ATank>(InPawn);
+		if (!ensure(PossessedTank)) { return; }
+
+		// Subscribe to tank's death event
 	}
 }
 

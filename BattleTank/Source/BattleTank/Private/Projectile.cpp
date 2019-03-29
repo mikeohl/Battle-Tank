@@ -6,6 +6,7 @@
 #include "Runtime/Engine/Classes/Particles/ParticleSystemComponent.h"
 #include "Runtime/Engine/Classes/PhysicsEngine/RadialForceComponent.h"
 #include "Runtime/Engine/Public/TimerManager.h"
+#include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 
 
@@ -72,6 +73,15 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, U
 
 	FTimerHandle TimerHandle;
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AProjectile::TimerExpired, DestroyDelay, false);
+
+	UGameplayStatics::ApplyRadialDamage(
+		this,
+		ProjectileDamage,
+		GetActorLocation(),
+		ExplosionForce->Radius,
+		UDamageType::StaticClass(),
+		TArray<AActor*>() // Damage all actors
+	);
 }
 
 void AProjectile::TimerExpired()
