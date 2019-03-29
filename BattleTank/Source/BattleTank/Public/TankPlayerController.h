@@ -30,11 +30,16 @@ protected:
 	UFUNCTION(BlueprintImplementableEvent, Category = "Setup")
 	void FoundAimingComponent(UTankAimingComponent* AimingComponent);
 
+	virtual void SetPawn(APawn* InPawn) override;
+
 private:
 	bool GetSightRayHitLocation(FVector& OutHitLocation) const;
 	bool GetLookDirection(const FVector2D& ScreenLocation, FVector& LookDirection) const;
 	bool GetLookVectorHitLocation(const FVector& LookDirection, FVector& HitLocation) const;
 	//bool GetViewportSize(int32 OutViewportSizeX, int32 OutViewportSizeY);
+
+	UFUNCTION()
+	void OnPossessedTankDeath();
 
 	UPROPERTY(EditDefaultsOnly)
 	float CrossHairXLocation = 0.5f;

@@ -2,7 +2,7 @@
 
 #include "TankPlayerController.h"
 #include "TankAimingComponent.h"
-
+#include "Tank.h"
 #include "Runtime/Engine/Classes/Engine/World.h"
 
 
@@ -89,6 +89,27 @@ bool ATankPlayerController::GetLookVectorHitLocation(const FVector& LookDirectio
 		return true;
 	}
 	return false;
+}
+
+// Set Delegate here because we can't reliably say that we've possessed at BeginPlay
+void ATankPlayerController::SetPawn(APawn* InPawn)
+{
+	Super::SetPawn(InPawn);
+
+	if (InPawn)
+	{
+		auto PossessedTank = Cast<ATank>(InPawn);
+		if (!ensure(PossessedTank)) { return; }
+
+		// Subscribe to tank's death event (Unique dynamic binding to this specific instance so it must be registered here)
+		PossessedTank->OnTankDeath.AddUniqueDynamic(this, &ATankPlayerController::OnPossessedTankDeath);
+	}
+}
+
+void ATankPlayerController::OnPossessedTankDeath()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Player tank is dead"));
+	StartSpectatingOnly();
 }
 
 //bool ATankPlayerController::GetViewportSize(int32 OutViewportSizeX, int32 OutViewportSizeY)

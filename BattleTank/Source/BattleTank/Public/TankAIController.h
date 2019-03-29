@@ -4,11 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "AIController.h"
+#include "Tank.h"
 #include "TankAIController.generated.h"
 
 // Forward Declaration
 class ATank;
-
 
 /**
  * Initializes and directs AI tank behavior
@@ -25,12 +25,14 @@ public:
 	virtual void SetPawn(APawn* InPawn) override;
 	void InitializeTanks();
 
+protected:
+	UPROPERTY(EditDefaultsOnly)
+		float AcceptanceRadius = 1000.0f;
 
 private:
 	ATank* ThisTank = nullptr;
 	ATank* PlayerTank = nullptr;
 
-protected:
-	UPROPERTY(EditDefaultsOnly)
-	float AcceptanceRadius = 1000.0f;
+	UFUNCTION()
+	void OnPossessedTankDeath();
 };
