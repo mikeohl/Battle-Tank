@@ -17,22 +17,21 @@ AProjectile::AProjectile()
 	PrimaryActorTick.bCanEverTick = false;
 
 	ProjectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(FName("Projectile Movement"));
-	ProjectileMovementComponent->bAutoActivate = false;
-
 	CollisionMesh = CreateDefaultSubobject<UStaticMeshComponent>(FName("Collision Mesh"));
-	SetRootComponent(CollisionMesh);
-	CollisionMesh->SetNotifyRigidBodyCollision(true);
-	CollisionMesh->SetVisibility(false);
-
 	LaunchBlast = CreateDefaultSubobject<UParticleSystemComponent>(FName("Launch Blast"));
-	LaunchBlast->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
-
 	ImpactBlast = CreateDefaultSubobject<UParticleSystemComponent>(FName("Impact Blast"));
+	ExplosionForce = CreateDefaultSubobject<URadialForceComponent>(FName("Explosion Force"));
+	
+	SetRootComponent(CollisionMesh);
+	LaunchBlast->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 	ImpactBlast->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+	ExplosionForce->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+
+	ProjectileMovementComponent->bAutoActivate = false;
 	ImpactBlast->bAutoActivate = false;
 
-	ExplosionForce = CreateDefaultSubobject<URadialForceComponent>(FName("Explosion Force"));
-	ExplosionForce->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
+	CollisionMesh->SetNotifyRigidBodyCollision(true);
+	CollisionMesh->SetVisibility(false);
 }
 
 // Called when the game starts or when spawned
