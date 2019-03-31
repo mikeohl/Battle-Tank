@@ -6,6 +6,7 @@
 #include "Components/StaticMeshComponent.h"
 #include "TankTrack.generated.h"
 
+
 /**
  * Tank Track Class sets maximum driving force and can apply force for tank movement
  */
@@ -34,12 +35,13 @@ protected:
 	UFUNCTION()
 	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
 
-private:
-	
-	//void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
-	  
+private:	  
 	void ApplyCorrectiveForce();
-	void Drive();
+	void Drive(float CurrentThrottle);
+	void Drive_C(float CurrentThrottle);
 
-	float AppliedThrottle = 0.0f;
+	void GetWheels();
+	TArray<class ASprungWheel*> GetWheels_C() const;
+
+	TArray<class ASprungWheel*> Wheels;
 };

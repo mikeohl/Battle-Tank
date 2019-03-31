@@ -21,10 +21,17 @@ void USpawnPoint::BeginPlay()
 {
 	Super::BeginPlay();
 
-	auto NewActor = GetWorld()->SpawnActor<AActor>(SpawnClassBlueprint);
-	if (!NewActor) { return; }
+	SpawnedActor = GetWorld()->SpawnActorDeferred<AActor>(SpawnClassBlueprint, GetComponentTransform());
+	if (!SpawnedActor) { return; }
 
-	NewActor->AttachToComponent(this, FAttachmentTransformRules::KeepRelativeTransform);
+	SpawnedActor->AttachToComponent(this, FAttachmentTransformRules::KeepWorldTransform);
+
+	SpawnedActor->FinishSpawning(GetComponentTransform());
+}
+
+AActor* USpawnPoint::GetSpawnedActor() const
+{
+	return SpawnedActor;
 }
 
 
